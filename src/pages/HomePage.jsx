@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { getCustInfo } from "../api/authApi"; //  고객 list
 import { getTodayCustInfo } from "../api/authApi"; // 오늘의 예약 고객 list 
+import { logout } from "../api/authApi"; // 로그아웃
 
 const weekDays = [
   { label: "월", date: 15, count: 3 },
@@ -23,16 +24,24 @@ const reservationStatus = (status) => {
     return { label : "예약취소", className: "status-cancelled" }; 
   }else if(status == "NO_SHOW"){
     return { label : "노쇼", className: "status-cancelled" }; 
+  }else{
+    return { label : status, className: "status-pending" };
   }
-
-  if(status == null){ 
-    return { label: status, className: "status-pending" }; 
-  } // 해당 없을 때 기본값
 
 }
 
 
 export default function HomePage() {
+  
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    try {
+      await logout();
+      window.location.replace("/");
+    } catch (error) {
+      console.error("로그아웃 중 오류 발생:", error);
+    }
+  };  
 
   const [custList, setCustList] = useState([]);
   useEffect(() => {
@@ -207,13 +216,17 @@ export default function HomePage() {
 
       <header className="home-header">
         <div className="home-logo">SKINOTE</div>
-        <button type="button" className="logout-btn">로그아웃</button>
+        <button type="button" className="logout-btn" onClick={handleLogout}>
+          로그아웃
+        </button>
       </header>
 
       <main className="home-content">
         <section className="section">
           <h2 className="section-title">오늘의 예약</h2>
 
+        {todayCustList.length > 0 ? (
+        <div className="reservation-list"> 
           {todayCustList.map((r) => (
           <div className="reservation-item" key={r.reservId}>
             <div className="reservation-time">
@@ -233,6 +246,10 @@ export default function HomePage() {
             </span>
           </div>
         ))}
+        </div>
+        ) : (
+          <div className="empty-state">오늘 예정된 예약이 없습니다.</div>
+        )}
         </section>
 
         <section className="section">
@@ -252,6 +269,6 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-    </div>
+      </div>
   );
 }

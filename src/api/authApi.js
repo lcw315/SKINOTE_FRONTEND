@@ -7,6 +7,10 @@ export const login = async ({ id, password }) => {
 };
 
 // 로그아웃 기능
+export const logout = async () => {
+  const res = await client.post("/auth/logout");
+  return res.data;
+}
 
 // 로그인 후 고객 정보 가져오기
 export const getCustInfo = async (param = {}) => {
