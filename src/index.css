@@ -1,111 +1,50 @@
+/**
+ * src/index.css 위치 기준으로 작성했습니다.
+ *
+ * LoginPage.jsx, HomePage.jsx 두 페이지에서 이미 쓰고 있는
+ * 색상 변수(--blue, --ink, --sub, --border, --field-bg, --error)를
+ * 여기 :root로 옮겨서 전역에서 한 번만 선언합니다.
+ * 각 페이지의 <style> 블록 안에 있는 변수 정의(:root 아님, .login-page/.home-page
+ * 클래스 안에 있는 --blue: #3182F6; 같은 줄들)는 이제 중복이니 지우셔도 됩니다.
+ * (var(--blue)처럼 "사용하는" 부분은 그대로 두시면 됩니다.)
+ *
+ * 기존 index.css에 있던 보라색 --accent 계열, 다크모드 블록, #root 고정 너비/중앙정렬,
+ * 전역 h1/h2/code 스타일은 지금 두 페이지 디자인과 안 맞거나 충돌 여지가 있어서 뺐습니다.
+ * (h1/h2 타이포그래피는 LoginPage/HomePage가 이미 .heading, .section-title 같은
+ * 자기 클래스로 직접 관리하고 있어서, 전역 규칙이 있으면 오히려 마진 등에서 충돌났었죠.)
+ */
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
+  --blue: #3182F6;
+  --blue-hover: #1B64DA;
+  --ink: #191F28;
+  --sub: #8B95A1;
+  --bg: #FFFFFF;
+  --border: #E5E8EB;
+  --field-bg: #F2F4F6;
+  --error: #F04452;
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --sans: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
+  color: var(--ink);
   background: var(--bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  font-family: var(--sans);
 }
 
 #root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
   min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
 }

@@ -1,17 +1,18 @@
 import { useState } from "react";
 import { login } from "../api/authApi";
+import { useNavigate } from 'react-router-dom';
 
 /**
  * src/pages/LoginPage.jsx 위치 기준으로 작성했습니다.
- * (import 경로: "../api/authApi" — pages 폴더에서 한 칸 위로 올라가면 src, 거기서 api/authApi)
- */
+*/
 export default function LoginPage() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
+  const navigate = useNavigate();
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -22,6 +23,7 @@ export default function LoginPage() {
     }
 
     setLoading(true);
+
     try {
       console.log("[요청 시작] id, password:", id, password);
 
@@ -29,15 +31,23 @@ export default function LoginPage() {
 
       console.log("[응답 받음]", data);
 
+      if (data.success === false) {
+        // 로그인 실패 (HTTP는 200이지만 내용상 실패)
+        setError(data.message || "로그인에 실패했습니다.");
+        return;
+      }
+
+      // 로그인 성공
       localStorage.setItem("token", data.token);
       if (keepLoggedIn) {
         localStorage.setItem("keepLoggedIn", "true");
       }
+      navigate('/home');
 
-      window.location.href = "/";
     } catch (err) {
-      console.log("[에러 발생]", err);
-      setError(err?.response?.data?.message || "아이디 또는 비밀번호가 올바르지 않습니다.");
+      // 여기는 이제 네트워크 에러, 서버 다운, 500 에러 등 진짜 "요청 자체가 실패"한 경우만 옴
+      console.log("[네트워크/서버 에러]", err);
+      setError(err.message || "로그인 요청 중 오류가 발생했습니다.");
     } finally {
       setLoading(false);
     }
@@ -46,22 +56,12 @@ export default function LoginPage() {
   return (
     <div className="login-page">
       <style>{`
+        /* 색상 변수, 폰트, 배경색은 index.css의 :root를 따르므로 삭제되었습니다 */
         .login-page {
-          --blue: #3182F6;
-          --blue-hover: #1B64DA;
-          --ink: #191F28;
-          --sub: #8B95A1;
-          --border: #E5E8EB;
-          --field-bg: #F2F4F6;
-          --error: #F04452;
-
           min-height: 100vh;
           display: flex;
           align-items: center;
           justify-content: center;
-          background: #FFFFFF;
-          font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
-          color: var(--ink);
           padding: 24px;
         }
 
